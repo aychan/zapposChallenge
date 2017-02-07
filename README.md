@@ -8,7 +8,7 @@ The challenge is to build an app that takes input from the user as a search quer
 - [ ] Animation when floating action button clicked ( https://developer.android.com/training/animation/index.html )
 
 Bonus points for:
-- [ ] Following Material Design guidelines ( https://material.io/guidelines/ )
+- [x] Following Material Design guidelines ( https://material.io/guidelines/ )
 - [ ] Well handled configuration changes ( https://developer.android.com/guide/topics/resources/runtime-changes.html )
 - [x] Using retrofit to handle your REST requests ( https://square.github.io/retrofit/ )
 

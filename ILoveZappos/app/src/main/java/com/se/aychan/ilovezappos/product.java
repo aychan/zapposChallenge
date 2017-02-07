@@ -4,6 +4,11 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Html;
+import android.text.Spanned;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * Created by aychan on 2/5/17.
@@ -23,7 +28,7 @@ public class Product extends BaseObservable implements Parcelable {
     private String productName;
 
     public Product(String brandName, String thumbnailImageUrl, int productId, String originalPrice, int styleId, int colorId, String price, String percentOff, String productUrl, String productName) {
-        this.brandName = brandName;
+        this.brandName = String.valueOf(Html.fromHtml(brandName));
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.productId = productId;
         this.originalPrice = originalPrice;
@@ -32,7 +37,7 @@ public class Product extends BaseObservable implements Parcelable {
         this.price = price;
         this.percentOff = percentOff;
         this.productUrl = productUrl;
-        this.productName = productName;
+        this.productName = String.valueOf(Html.fromHtml(productName));
     }
 
     protected Product(Parcel in) {
@@ -61,7 +66,15 @@ public class Product extends BaseObservable implements Parcelable {
     };
     @Bindable
     public String getBrandName() {
-        return brandName;
+        String s = null;
+        try {
+            s = URLDecoder.decode(brandName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        //Decode UTF-8 special characters from their ASCII code
+        Spanned f = Html.fromHtml(s);
+        return f.toString();
     }
 
     public void setBrandName(String brandName) {
@@ -134,7 +147,14 @@ public class Product extends BaseObservable implements Parcelable {
     }
     @Bindable
     public String getProductName() {
-        return productName;
+        String s = null;
+        try {
+            s = URLDecoder.decode(productName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Spanned f = Html.fromHtml(s);
+        return f.toString();
     }
 
     public void setProductName(String productName) {
