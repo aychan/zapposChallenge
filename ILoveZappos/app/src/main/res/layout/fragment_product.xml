@@ -23,6 +23,7 @@
 
             <LinearLayout
                 android:padding="@dimen/activity_vertical_margin"
+                android:animateLayoutChanges="true"
                 android:background="@android:color/white"
                 android:elevation="3dp"
                 android:orientation="horizontal"

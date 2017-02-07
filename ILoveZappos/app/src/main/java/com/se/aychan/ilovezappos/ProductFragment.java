@@ -83,6 +83,7 @@ public class ProductFragment extends Fragment implements Serializable{
         View root = binding.getRoot();
         initializeViews(root);
         binding.setProduct(product);
+
         return root;
     }
 

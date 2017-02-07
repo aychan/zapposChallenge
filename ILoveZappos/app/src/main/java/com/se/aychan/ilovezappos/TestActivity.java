@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -18,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -50,6 +53,12 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
 
     //Retrofit Variables
     private ZapposService service;
+
+    //RecyclerView Variables
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +69,21 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
 //        setSupportActionBar(toolbar);
         initializeViews();
         createRetrofit();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        // TODO: 2/7/17 do i make the adapter here? or wait until user input
+        //mAdapter = new ProductAdapter(myDataset);
+        //mRecyclerView.setAdapter(mAdapter);
     }
     /*
     link View variables to Layout Views
@@ -92,18 +116,25 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
                             /*
                                 When first search, productFragent will be null and will then be created
                                 Once the user updates the search, fragment will be replaced!
-                                todo determine why fragments still overlap & sometimes requires re-query of Api
                                 todo recyclerView, or CardView!
                              */
-                            if (productFragment!=null){
-                                fragmentTransation.remove(productFragment);
-                                productFragment = ProductFragment.newInstance(array[0]);
-                                fragmentTransation.replace(R.id.productFragmentLayout,productFragment);
-                            }else{
-                                productFragment = ProductFragment.newInstance(array[0]);
-                                fragmentTransation.add(productFragmentLayout.getId(),productFragment,"productFragment");
+                            if(array.length == 0){
+                                Toast.makeText(TestActivity.this, "No Products Match Your Search :(", Toast.LENGTH_SHORT).show();
+                            }else {
+
+//                                if (productFragment != null) {
+//                                    fragmentTransation.remove(productFragment);
+//                                    productFragment = ProductFragment.newInstance(array[0]);
+//                                    fragmentTransation.replace(R.id.productFragmentLayout, productFragment);
+//                                } else {
+//                                    productFragment = ProductFragment.newInstance(array[0]);
+//                                    fragmentTransation.add(productFragmentLayout.getId(), productFragment, "productFragment");
+//                                }
+//                                fragmentTransation.commit();
+
+                                mAdapter = new ProductAdapter(array);
+                                mRecyclerView.setAdapter(mAdapter);
                             }
-                            fragmentTransation.commit();
                             progressBar.setVisibility(View.INVISIBLE);
                         }else{
                             Log.d(TAG, "Inefficient Query");
