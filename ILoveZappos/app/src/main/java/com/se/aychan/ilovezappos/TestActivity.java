@@ -92,8 +92,10 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
                             /*
                                 When first search, productFragent will be null and will then be created
                                 Once the user updates the search, fragment will be replaced!
+                                todo determine why fragments still overlap & sometimes requires re-query of Api
                              */
                             if (productFragment!=null){
+                                fragmentTransation.remove(productFragment);
                                 productFragment = ProductFragment.newInstance(array[0]);
                                 fragmentTransation.replace(R.id.productFragmentLayout,productFragment);
                             }else{

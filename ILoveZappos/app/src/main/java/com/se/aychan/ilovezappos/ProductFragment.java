@@ -1,19 +1,20 @@
 package com.se.aychan.ilovezappos;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.se.aychan.ilovezappos.databinding.FragmentProductBinding;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -68,29 +69,35 @@ public class ProductFragment extends Fragment implements Serializable{
         }else{
             Log.d(TAG, "Arguments are null");
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_product, container, false);
+        // View root = inflater.inflate(R.layout.fragment_product, container, false);
+        // No longer using given inflater, will be using data binding with this fragment
+        FragmentProductBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_product,container,false);
+        // TODO: 2/7/17 design fragment UI
+        View root = binding.getRoot();
         initializeViews(root);
+        binding.setProduct(product);
         return root;
     }
 
     private void initializeViews(View root) {
         ImageView productImage = (ImageView) root.findViewById(R.id.product_img);
         new DownloadImageTask(productImage).execute(product.getThumbnailImageUrl());
-        TextView productBrand = (TextView)root.findViewById(R.id.product_brand);
-        TextView productName = (TextView) root.findViewById(R.id.product_name);
-        TextView productPrice = (TextView) root.findViewById(R.id.product_price);
-        TextView productPriceOriginal = (TextView) root.findViewById(R.id.product_price_original);
-
-        productBrand.setText(Html.fromHtml(product.getBrandName()));
-        productName.setText(Html.fromHtml(product.getProductName()));
-        productPrice.setText(product.getPrice());
-        productPriceOriginal.setText(product.getOriginalPrice());
+//        TextView productBrand = (TextView)root.findViewById(R.id.product_brand);
+//        TextView productName = (TextView) root.findViewById(R.id.product_name);
+//        TextView productPrice = (TextView) root.findViewById(R.id.product_price);
+//        TextView productPriceOriginal = (TextView) root.findViewById(R.id.product_price_original);
+//
+//        productBrand.setText(Html.fromHtml(product.getBrandName()));
+//        productName.setText(Html.fromHtml(product.getProductName()));
+//        productPrice.setText(product.getPrice());
+//        productPriceOriginal.setText(product.getOriginalPrice());
 
     }
 
@@ -123,7 +130,6 @@ public class ProductFragment extends Fragment implements Serializable{
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onProductFragmentInteraction(uri);
@@ -158,7 +164,6 @@ public class ProductFragment extends Fragment implements Serializable{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnProductFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onProductFragmentInteraction(Uri uri);
     }
 }

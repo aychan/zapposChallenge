@@ -1,44 +1,58 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:elevation="5dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.se.aychan.ilovezappos.ProductFragment">
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="product" type="com.se.aychan.ilovezappos.Product"/>
+    </data>
 
-    <LinearLayout
-        android:layout_gravity="center"
-        android:orientation="vertical"
+    <FrameLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:elevation="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/product_img"
+        android:layout_height="wrap_content"
+        tools:context="com.se.aychan.ilovezappos.ProductFragment">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/i_love_zappos"/>
-        <TextView
-            android:id="@+id/product_brand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-         <TextView
-            android:id="@+id/product_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-         <TextView
-            android:id="@+id/product_price_original"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/product_percent_off"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/product_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/i_love_zappos" />
+            <TextView
+                android:id="@+id/product_brand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{product.brandName}"/>
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{product.productName}"/>
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{product.price}"/>
+            <TextView
+                android:id="@+id/product_price_original"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{product.originalPrice}"/>
+            <TextView
+                android:id="@+id/product_percent_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{product.percentOff}"/>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 
 
-</FrameLayout>
+    </FrameLayout>
+
+
+</layout>

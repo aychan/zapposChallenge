@@ -1,5 +1,7 @@
 package com.se.aychan.ilovezappos;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,7 +10,7 @@ import android.os.Parcelable;
  * Class which holds Product Object with specific attributes based on ReST Structure
  */
 
-public class Product implements Parcelable {
+public class Product extends BaseObservable implements Parcelable {
     private String brandName;
     private String thumbnailImageUrl;
     private int productId;
@@ -57,7 +59,7 @@ public class Product implements Parcelable {
             return new Product[size];
         }
     };
-
+    @Bindable
     public String getBrandName() {
         return brandName;
     }
@@ -65,7 +67,7 @@ public class Product implements Parcelable {
     public void setBrandName(String brandName) {
         this.brandName = brandName;
     }
-
+    @Bindable
     public String getThumbnailImageUrl() {
         return thumbnailImageUrl;
     }
@@ -74,6 +76,7 @@ public class Product implements Parcelable {
         this.thumbnailImageUrl = thumbnailImageUrl;
     }
 
+    @Bindable
     public int getProductId() {
         return productId;
     }
@@ -81,7 +84,7 @@ public class Product implements Parcelable {
     public void setProductId(int productId) {
         this.productId = productId;
     }
-
+    @Bindable
     public String getOriginalPrice() {
         return originalPrice;
     }
@@ -89,7 +92,7 @@ public class Product implements Parcelable {
     public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
-
+    @Bindable
     public int getStyleId() {
         return styleId;
     }
@@ -97,7 +100,7 @@ public class Product implements Parcelable {
     public void setStyleId(int styleId) {
         this.styleId = styleId;
     }
-
+    @Bindable
     public int getColorId() {
         return colorId;
     }
@@ -105,7 +108,7 @@ public class Product implements Parcelable {
     public void setColorId(int colorId) {
         this.colorId = colorId;
     }
-
+    @Bindable
     public String getPrice() {
         return price;
     }
@@ -113,7 +116,7 @@ public class Product implements Parcelable {
     public void setPrice(String price) {
         this.price = price;
     }
-
+    @Bindable
     public String getPercentOff() {
         return percentOff;
     }
@@ -121,7 +124,7 @@ public class Product implements Parcelable {
     public void setPercentOff(String percentOff) {
         this.percentOff = percentOff;
     }
-
+    @Bindable
     public String getProductUrl() {
         return productUrl;
     }
@@ -129,7 +132,7 @@ public class Product implements Parcelable {
     public void setProductUrl(String productUrl) {
         this.productUrl = productUrl;
     }
-
+    @Bindable
     public String getProductName() {
         return productName;
     }
@@ -156,4 +159,5 @@ public class Product implements Parcelable {
         dest.writeString(productUrl);
         dest.writeString(productName);
     }
+
 }
