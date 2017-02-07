@@ -1,11 +1,14 @@
 package com.se.aychan.ilovezappos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by aychan on 2/5/17.
  * Class which holds Product Object with specific attributes based on ReST Structure
  */
 
-public class Product {
+public class Product implements Parcelable {
     private String brandName;
     private String thumbnailImageUrl;
     private int productId;
@@ -29,6 +32,31 @@ public class Product {
         this.productUrl = productUrl;
         this.productName = productName;
     }
+
+    protected Product(Parcel in) {
+        brandName = in.readString();
+        thumbnailImageUrl = in.readString();
+        productId = in.readInt();
+        originalPrice = in.readString();
+        styleId = in.readInt();
+        colorId = in.readInt();
+        price = in.readString();
+        percentOff = in.readString();
+        productUrl = in.readString();
+        productName = in.readString();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 
     public String getBrandName() {
         return brandName;
@@ -108,5 +136,24 @@ public class Product {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(brandName);
+        dest.writeString(thumbnailImageUrl);
+        dest.writeInt(productId);
+        dest.writeString(originalPrice);
+        dest.writeInt(styleId);
+        dest.writeInt(colorId);
+        dest.writeString(price);
+        dest.writeString(percentOff);
+        dest.writeString(productUrl);
+        dest.writeString(productName);
     }
 }
