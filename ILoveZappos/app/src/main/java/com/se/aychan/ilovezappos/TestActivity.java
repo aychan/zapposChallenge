@@ -5,12 +5,13 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -34,9 +35,11 @@ public class TestActivity extends AppCompatActivity {
     protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
 
     //Views
-    private EditText searchET;
+
     private TextView resultTV;
     private ImageView productImg;
+    private ProgressBar progressBar;
+    private android.support.v7.widget.SearchView searchView;
 
     //Retrofit Variables
     private ZapposService service;
@@ -44,6 +47,10 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        assert toolbar != null;
+//        toolbar.addView(new EditText(getApplicationContext()));
+//        setSupportActionBar(toolbar);
         initializeViews();
         createRetrofit();
     }
@@ -51,15 +58,20 @@ public class TestActivity extends AppCompatActivity {
     link View variables to Layout Views
      */
     void initializeViews(){
-        searchET = (EditText)findViewById(R.id.searchET);
+        searchView = (android.support.v7.widget.SearchView)findViewById(R.id.SearchView);
+
         resultTV = (TextView)findViewById(R.id.resultTV);
         productImg = (ImageView)findViewById(R.id.productIV);
-        Button searchBtn = (Button) findViewById(R.id.searchBtn);
-        assert searchBtn != null;
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        assert progressBar != null;
+        progressBar.setVisibility(View.INVISIBLE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                final Call<SearchQuery> result = service.listSearch(searchET.getText().toString(),KEY);
+            public boolean onQueryTextSubmit(String query) {
+                progressBar.setVisibility(View.VISIBLE);
+                final Call<SearchQuery> result = service.listSearch(query,KEY);
                 result.enqueue(new Callback<SearchQuery>() {
                     @Override
                     public void onResponse(Call<SearchQuery> call, Response<SearchQuery> response) {
@@ -78,14 +90,23 @@ public class TestActivity extends AppCompatActivity {
                         Log.d(TAG, t.getMessage());
                     }
                 });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
+
+
     }
     /*
     Given one product, display onto screen
      */
     void displayProduct(Product product) {
         // TODO: 2/5/17 Async Activity to first show spinner
+
         Log.d(TAG, product.getBrandName() + " " + product.getProductName() + " " + product.getProductUrl() + " " + product.getThumbnailImageUrl());
         String productName = null;
         try {
@@ -126,7 +147,7 @@ public class TestActivity extends AppCompatActivity {
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
+        DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
 
@@ -144,6 +165,7 @@ public class TestActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
+            progressBar.setVisibility(View.INVISIBLE);
             bmImage.setImageBitmap(result);
         }
     }
