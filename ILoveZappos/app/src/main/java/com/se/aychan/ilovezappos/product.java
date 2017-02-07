@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -121,17 +122,35 @@ public class Product extends BaseObservable implements Parcelable {
     public void setColorId(int colorId) {
         this.colorId = colorId;
     }
+
     @Bindable
     public String getPrice() {
+        if(price.equals(getOriginalPrice())){
+            return " ";
+        }
         return price;
     }
 
     public void setPrice(String price) {
         this.price = price;
     }
+    /*
+        Determine whether or not there is any percent off
+     */
+    public boolean hasDiscount(){
+        return !price.equals(originalPrice);
+    }
     @Bindable
     public String getPercentOff() {
-        return percentOff;
+        StringBuilder stringBuffer = new StringBuilder();
+        if(!hasDiscount()){
+            Log.d("Product Info", " No Discount");
+            stringBuffer.append(" ");
+        }else{
+            stringBuffer.append("(").append(percentOff).append(" off)");
+        }
+
+        return stringBuffer.toString();
     }
 
     public void setPercentOff(String percentOff) {

@@ -93,6 +93,7 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
                                 When first search, productFragent will be null and will then be created
                                 Once the user updates the search, fragment will be replaced!
                                 todo determine why fragments still overlap & sometimes requires re-query of Api
+                                todo recyclerView, or CardView!
                              */
                             if (productFragment!=null){
                                 fragmentTransation.remove(productFragment);
