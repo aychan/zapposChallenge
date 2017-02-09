@@ -1,5 +1,6 @@
 package com.se.aychan.ilovezappos;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,13 +14,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
@@ -37,13 +36,13 @@ import retrofit2.http.Query;
 /*
     TestActivity to test the GET & POST of the Square Retrofit ReST Software
  */
-public class TestActivity extends AppCompatActivity implements ProductFragment.OnProductFragmentInteractionListener{
+public class TestActivity extends AppCompatActivity implements ProductFragment.OnProductFragmentInteractionListener, ProductAdapter.onProductClickedListener{
     protected final String TAG = this.getClass().getSimpleName();
     protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
 
     //Views
-    private TextView resultTV;
-    private ImageView productImg;
+//    private TextView resultTV;
+//    private ImageView productImg;
     private ProgressBar progressBar;
     private android.support.v7.widget.SearchView searchView;
     private FrameLayout productFragmentLayout;
@@ -76,6 +75,7 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
+
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -84,16 +84,19 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
         // TODO: 2/7/17 do i make the adapter here? or wait until user input
         //mAdapter = new ProductAdapter(myDataset);
         //mRecyclerView.setAdapter(mAdapter);
+
     }
+
+
     /*
     link View variables to Layout Views
      */
     void initializeViews(){
-        productFragmentLayout = (FrameLayout)findViewById(R.id.productFragmentLayout);
+        //productFragmentLayout = (FrameLayout)findViewById(R.id.productFragmentLayout);
         searchView = (android.support.v7.widget.SearchView)findViewById(R.id.SearchView);
 
-        resultTV = (TextView)findViewById(R.id.resultTV);
-        productImg = (ImageView)findViewById(R.id.productIV);
+//        resultTV = (TextView)findViewById(R.id.resultTV);
+//        productImg = (ImageView)findViewById(R.id.productIV);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         assert progressBar != null;
@@ -131,7 +134,7 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
 //                                    fragmentTransation.add(productFragmentLayout.getId(), productFragment, "productFragment");
 //                                }
 //                                fragmentTransation.commit();
-
+                                // TODO: 2/7/17 there are multiple items which are same but just have different color, find way to group them together
                                 mAdapter = new ProductAdapter(array);
                                 mRecyclerView.setAdapter(mAdapter);
                             }
@@ -168,9 +171,9 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        resultTV.setText(Html.fromHtml(productName));
-        //Set thumbnail image onto display
-        new DownloadImageTask(productImg).execute(product.getThumbnailImageUrl());
+//        resultTV.setText(Html.fromHtml(productName));
+//        //Set thumbnail image onto display
+//        new DownloadImageTask(productImg).execute(product.getThumbnailImageUrl());
 
     }
     /*
@@ -189,6 +192,14 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
     @Override
     public void onProductFragmentInteraction(Uri uri) {
         Log.d(TAG, "hello world");
+    }
+
+    @Override
+    public void onProductInteraction(Product product) {
+        Intent intent = new Intent(this, ProductDetails.class);
+        intent.putExtra("product",product);
+//        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(TestActivity.this, Pair.create(this,"selectProduct")).toBundle();
+        startActivity(intent);
     }
 
     /*

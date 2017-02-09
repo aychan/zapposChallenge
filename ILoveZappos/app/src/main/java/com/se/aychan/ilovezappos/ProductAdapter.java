@@ -1,5 +1,6 @@
 package com.se.aychan.ilovezappos;
 
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.se.aychan.ilovezappos.databinding.FragmentProductBinding;
+
 import java.io.InputStream;
 
 /**
@@ -20,9 +23,13 @@ import java.io.InputStream;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder>{
     private Product[] mDataSet;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    // Databinding
+    private FragmentProductBinding binding;
+
+    // Interface
+    private onProductClickedListener mListener;
+
+    // Provides reference to the views for each Product
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
         //product fragment layout aspects
@@ -33,7 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private TextView percentOff;
         private ImageView productImage;
 
-        public ViewHolder(View view) {
+        public ViewHolder(final View view) {
             super(view);
             this.view = view;
 
@@ -53,19 +60,42 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_product, parent, false);
-        return new ViewHolder(view);
+        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_product, parent, false);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        binding = DataBindingUtil.inflate(layoutInflater,R.layout.fragment_product,parent,false);
+        View root = binding.getRoot();
+        return new ViewHolder(root);
     }
 
+
+
     @Override
-    public void onBindViewHolder(ProductAdapter.ViewHolder holder, int position) {
-        holder.productName.setText(mDataSet[position].getProductName());
-        holder.brandName.setText(mDataSet[position].getBrandName());
-        holder.price.setText(mDataSet[position].getPrice());
-        holder.originalPrice.setText(mDataSet[position].getOriginalPrice());
-        holder.percentOff.setText(mDataSet[position].getPercentOff());
+    public void onBindViewHolder(final ProductAdapter.ViewHolder holder, final int position) {
+        // TODO: 2/8/17 holder.bind(mDataSet[position]); <-- the real databinding method, except for the image
+        binding.setProduct(mDataSet[holder.getAdapterPosition()]);
+//        holder.productName.setText(mDataSet[position].getProductName());
+//        holder.brandName.setText(mDataSet[position].getBrandName());
+//        holder.price.setText(mDataSet[position].getPrice());
+//        holder.originalPrice.setText(mDataSet[position].getOriginalPrice());
+//        holder.percentOff.setText(mDataSet[position].getPercentOff());
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Product Adapter", mDataSet[holder.getAdapterPosition()].getProductName());
+                mListener = (onProductClickedListener)holder.view.getContext();
+                Product product = mDataSet[holder.getAdapterPosition()];
+                if(product != null){
+                    mListener.onProductInteraction(product);
+                }else{
+                    Log.d("Product Adapter", product.getProductName());
+                }
+
+            }
+        });
         new DownloadImageTask(holder.productImage).execute(mDataSet[position].getThumbnailImageUrl());
+
+
     }
 
     @Override
@@ -101,4 +131,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
     }
 
+
+
+    public interface onProductClickedListener{
+        void onProductInteraction(Product product);
+    }
 }
