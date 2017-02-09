@@ -3,9 +3,6 @@ package com.se.aychan.ilovezappos;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,62 +11,41 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
+ * {@link ShoppingCartFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
+ * Use the {@link ShoppingCartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment implements ProductAdapter.onProductClickedListener{
-    protected final String TAG = getClass().getSimpleName();
-    //RecyclerView Variables
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+public class ShoppingCartFragment extends Fragment {
+
 
     private OnFragmentInteractionListener mListener;
 
-    public SearchFragment() {
+    public ShoppingCartFragment() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SearchFragment.
+     * @return A new instance of fragment ShoppingCartFragment.
      */
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
-
+    // TODO: Rename and change types and number of parameters
+    public static ShoppingCartFragment newInstance() {
+        ShoppingCartFragment fragment = new ShoppingCartFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        //mRecyclerView.setHasFixedSize(true);
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(view.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        Product[] products = SearchSingleton.getInstance().getAll();
-        Log.d(TAG, String.valueOf(products.length));
-        mAdapter = new ProductAdapter(products, this);
-        mRecyclerView.setAdapter(mAdapter);
-        return view;
-
+        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
     }
 
     @Override
@@ -89,11 +65,6 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
         mListener = null;
     }
 
-    @Override
-    public void onProductInteraction(Product product) {
-        mListener.onSearchFragmentInteraction(product);
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -105,6 +76,7 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onSearchFragmentInteraction(Product product);
+        // TODO: Update argument type and name
+        void onCartFragmentInteraction(Product product);
     }
 }

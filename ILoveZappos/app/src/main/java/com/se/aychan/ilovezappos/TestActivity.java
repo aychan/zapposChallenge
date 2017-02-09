@@ -30,7 +30,7 @@ import retrofit2.http.Query;
 /*
     TestActivity to test the GET & POST of the Square Retrofit ReST Software
  */
-public class TestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener{
+public class TestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener, ShoppingCartFragment.OnFragmentInteractionListener{
     protected final String TAG = this.getClass().getSimpleName();
     protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
 
@@ -92,8 +92,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
 
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(mViewPager);
+
 
     }
 
@@ -215,6 +214,11 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         startActivity(intent);
     }
 
+    @Override
+    public void onCartFragmentInteraction(Product product) {
+        // TODO: 2/9/17 do your thang
+    }
+
     /*
     Interface which is used to obtain values from API
      */
@@ -248,7 +252,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                     break;
 
                 case 1:
-                    // TODO: 2/9/17 cart fragment 
+                    fragment = ShoppingCartFragment.newInstance();
                     break;
                 
             }

@@ -34,10 +34,10 @@ public class ProductDetails extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShoppingCart.getInstance().addToCart(product);
+                ShoppingCartSingleton.getInstance().addToCart(product);
                 Snackbar snackbar = Snackbar.make(v, "Added to Shopping Cart!",Snackbar.LENGTH_SHORT);
                 snackbar.show();
-                Log.d(TAG, "count: "+ShoppingCart.getInstance().getCartCount());
+                Log.d(TAG, "count: "+ ShoppingCartSingleton.getInstance().getCartCount());
             }
         });
         new DownloadImageTask(imageView).execute(product.getThumbnailImageUrl());

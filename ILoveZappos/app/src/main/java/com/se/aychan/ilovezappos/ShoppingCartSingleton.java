@@ -6,16 +6,16 @@ import java.util.ArrayList;
  * Created by aychan on 2/9/17.
  * Holds most current list of Products within shopping cart
  */
-public class ShoppingCart {
+public class ShoppingCartSingleton {
     private ArrayList<Product> products = new ArrayList<>();
 
-    private static ShoppingCart ourInstance = new ShoppingCart();
+    private static ShoppingCartSingleton ourInstance = new ShoppingCartSingleton();
 
-    static ShoppingCart getInstance() {
+    static ShoppingCartSingleton getInstance() {
         return ourInstance;
     }
 
-    private ShoppingCart() {
+    private ShoppingCartSingleton() {
     }
 
     void addToCart(Product product){
@@ -43,5 +43,15 @@ public class ShoppingCart {
             return 0;
         }
         return products.size();
+    }
+
+    int getTotalCost(){
+        int total = 0;
+        for(Product p : products){
+            String priceStr = p.getPrice().substring(1);
+            Double price = Double.parseDouble(priceStr);
+            total+=price;
+        }
+        return total;
     }
 }

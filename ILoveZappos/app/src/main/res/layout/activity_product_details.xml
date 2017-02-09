@@ -92,6 +92,7 @@
                         android:id="@+id/product_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@android:color/holo_red_dark"
                         android:text="@{product.price}"
                         android:textSize="14sp"/>
                     <TextView
@@ -99,6 +100,7 @@
                         android:paddingStart="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@android:color/holo_red_dark"
                         android:text="@{product.percentOff}"
                         android:textStyle="bold"
                         android:textSize="12sp"/>
