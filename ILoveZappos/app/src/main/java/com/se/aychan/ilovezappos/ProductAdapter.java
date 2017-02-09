@@ -27,10 +27,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private FragmentProductBinding binding;
 
     // Interface
-    private onProductClickedListener mListener;
+    public onProductClickedListener mListener;
 
     // Provides reference to the views for each Product
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         private View view;
         //product fragment layout aspects
         private TextView productName;
@@ -54,8 +54,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ProductAdapter(Product[] myDataset) {
+    public ProductAdapter(Product[] myDataset, onProductClickedListener listener) {
         mDataSet = myDataset;
+        mListener = listener;
     }
 
     @Override
@@ -83,7 +84,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Log.d("Product Adapter", mDataSet[holder.getAdapterPosition()].getProductName());
-                mListener = (onProductClickedListener)holder.view.getContext();
                 Product product = mDataSet[holder.getAdapterPosition()];
                 if(product != null){
                     mListener.onProductInteraction(product);
@@ -133,7 +133,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
 
 
-    public interface onProductClickedListener{
+    interface onProductClickedListener{
         void onProductInteraction(Product product);
     }
 }

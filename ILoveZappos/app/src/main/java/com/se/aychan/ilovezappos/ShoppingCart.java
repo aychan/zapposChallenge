@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Holds most current list of Products within shopping cart
  */
 public class ShoppingCart {
-    private ArrayList<Product> products;
+    private ArrayList<Product> products = new ArrayList<>();
 
     private static ShoppingCart ourInstance = new ShoppingCart();
 
@@ -19,13 +19,13 @@ public class ShoppingCart {
     }
 
     void addToCart(Product product){
-        if(!products.contains(product)){
+        if(products != null && !products.contains(product)){
             products.add(product);
         }
     }
 
     void removeFromCart(Product product){
-        if(products.contains(product)){
+        if(products != null && products.contains(product)){
             products.remove(product);
         }
     }
@@ -39,6 +39,9 @@ public class ShoppingCart {
     }
 
     int getCartCount(){
+        if(products == null){
+            return 0;
+        }
         return products.size();
     }
 }

@@ -1,27 +1,21 @@
 package com.se.aychan.ilovezappos;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -36,7 +30,7 @@ import retrofit2.http.Query;
 /*
     TestActivity to test the GET & POST of the Square Retrofit ReST Software
  */
-public class TestActivity extends AppCompatActivity implements ProductFragment.OnProductFragmentInteractionListener, ProductAdapter.onProductClickedListener{
+public class TestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener{
     protected final String TAG = this.getClass().getSimpleName();
     protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
 
@@ -58,6 +52,10 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    // View Pager Variables
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,21 +67,33 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
         initializeViews();
         createRetrofit();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+//
+//        // use this setting to improve performance if you know that changes
+//        // in content do not change the layout size of the RecyclerView
+//        mRecyclerView.setHasFixedSize(true);
+//
+//
+//        // use a linear layout manager
+//        mLayoutManager = new LinearLayoutManager(this);
+//        mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
         // TODO: 2/7/17 do i make the adapter here? or wait until user input
         //mAdapter = new ProductAdapter(myDataset);
         //mRecyclerView.setAdapter(mAdapter);
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
+
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(mViewPager);
 
     }
 
@@ -113,9 +123,9 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
                         Log.d(TAG, String.valueOf(response.raw()));
                         if(response.isSuccessful()){
                             Product[] array = response.body().getResults();
-                            //displayProduct(array[0]);
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            FragmentTransaction fragmentTransation = fragmentManager.beginTransaction();
+
+                            //FragmentManager fragmentManager = getSupportFragmentManager();
+                            //FragmentTransaction fragmentTransation = fragmentManager.beginTransaction();
                             /*
                                 When first search, productFragent will be null and will then be created
                                 Once the user updates the search, fragment will be replaced!
@@ -124,6 +134,13 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
                             if(array.length == 0){
                                 Toast.makeText(TestActivity.this, "No Products Match Your Search :(", Toast.LENGTH_SHORT).show();
                             }else {
+                                /*
+                                    Clear the Singleton, add new data for Fragment use
+                                 */
+                                SearchSingleton.getInstance().clearQuery();
+                                SearchSingleton.getInstance().addAll(array);
+                                mSectionsPagerAdapter.notifyDataSetChanged();
+
 
 //                                if (productFragment != null) {
 //                                    fragmentTransation.remove(productFragment);
@@ -135,8 +152,8 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
 //                                }
 //                                fragmentTransation.commit();
                                 // TODO: 2/7/17 there are multiple items which are same but just have different color, find way to group them together
-                                mAdapter = new ProductAdapter(array);
-                                mRecyclerView.setAdapter(mAdapter);
+//                                mAdapter = new ProductAdapter(array);
+//                                mRecyclerView.setAdapter(mAdapter);
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }else{
@@ -190,15 +207,11 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
     }
 
     @Override
-    public void onProductFragmentInteraction(Uri uri) {
-        Log.d(TAG, "hello world");
-    }
-
-    @Override
-    public void onProductInteraction(Product product) {
+    public void onSearchFragmentInteraction(Product product) {
         Intent intent = new Intent(this, ProductDetails.class);
         intent.putExtra("product",product);
-//        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(TestActivity.this, Pair.create(this,"selectProduct")).toBundle();
+        // TODO: 2/9/17 transition animation
+        //Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(TestActivity.this, Pair.create(this,"selectProduct")).toBundle();
         startActivity(intent);
     }
 
@@ -212,32 +225,59 @@ public class TestActivity extends AppCompatActivity implements ProductFragment.O
         //        Call<SearchQuery> listSearch();
     }
 
-    /*
-       AsyncTask which loads URL from online onto ImageView
-    */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
-        DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.d("Error", e.getMessage());
-                e.printStackTrace();
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(TAG," ANYONE HOME?");
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            Fragment fragment = new Fragment();
+            switch (position){
+                case 0:
+                    fragment = SearchFragment.newInstance();
+//                     notifyDataSetChanged();
+                    break;
+
+                case 1:
+                    // TODO: 2/9/17 cart fragment 
+                    break;
+                
             }
-            return mIcon11;
+            return fragment;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            progressBar.setVisibility(View.INVISIBLE);
-            bmImage.setImageBitmap(result);
+        @Override
+        public int getItemPosition(Object object) {
+            //return super.getItemPosition(object);
+            return POSITION_NONE;
         }
+
+        @Override
+        public int getCount() {
+            // Show 2 total pages.
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Search";
+                case 1:
+                    return "Cart";
+                
+            }
+            return null;
+        }
+
     }
 }
