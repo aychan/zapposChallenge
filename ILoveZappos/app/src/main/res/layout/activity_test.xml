@@ -78,14 +78,14 @@
     </RelativeLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_shopping_cart_white"
-        style="@style/Base.TextAppearance.AppCompat.Button"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_vertical_margin"
-        android:layout_gravity="bottom|end"
-        app:fabSize="normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:src="@drawable/ic_shopping_cart_white"-->
+        <!--style="@style/Base.TextAppearance.AppCompat.Button"-->
+        <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+        <!--android:layout_marginEnd="@dimen/activity_vertical_margin"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--app:fabSize="normal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
 </android.support.design.widget.CoordinatorLayout>
