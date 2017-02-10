@@ -1,7 +1,10 @@
 package com.se.aychan.ilovezappos;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -56,11 +58,14 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+    // String Variables
+    public static String queryText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        assert toolbar != null;
 //        toolbar.addView(new EditText(getApplicationContext()));
 //        setSupportActionBar(toolbar);
@@ -92,7 +97,9 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
 
-
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
 
     }
 
@@ -114,6 +121,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                TestActivity.queryText = query;
                 progressBar.setVisibility(View.VISIBLE);
                 final Call<SearchQuery> result = service.listSearch(query,KEY);
                 result.enqueue(new Callback<SearchQuery>() {
@@ -121,6 +129,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                     public void onResponse(Call<SearchQuery> call, Response<SearchQuery> response) {
                         Log.d(TAG, String.valueOf(response.raw()));
                         if(response.isSuccessful()){
+                            searchView.clearFocus();
                             Product[] array = response.body().getResults();
 
                             //FragmentManager fragmentManager = getSupportFragmentManager();
@@ -128,7 +137,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                             /*
                                 When first search, productFragent will be null and will then be created
                                 Once the user updates the search, fragment will be replaced!
-                                todo recyclerView, or CardView!
                              */
                             if(array.length == 0){
                                 Toast.makeText(TestActivity.this, "No Products Match Your Search :(", Toast.LENGTH_SHORT).show();
@@ -210,7 +218,8 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         Intent intent = new Intent(this, ProductDetails.class);
         intent.putExtra("product",product);
         // TODO: 2/9/17 transition animation
-        //Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(TestActivity.this, Pair.create(this,"selectProduct")).toBundle();
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
         startActivity(intent);
     }
 
@@ -290,4 +299,11 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         mSectionsPagerAdapter.notifyDataSetChanged();
         super.onPostResume();
     }
+    @Override
+    protected void onResume(){
+        searchView.clearFocus();
+        super.onResume();
+
+    }
+
 }

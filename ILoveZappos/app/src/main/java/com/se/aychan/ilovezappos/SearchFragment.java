@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 
 
 /**
@@ -27,6 +29,9 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
     private RecyclerView.LayoutManager mLayoutManager;
 
     private OnFragmentInteractionListener mListener;
+
+    private TextView searchText;
+
 
     public SearchFragment() {
         // Required empty public constructor
@@ -57,7 +62,8 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-
+        searchText = (TextView) view.findViewById(R.id.searchTextV);
+        searchText.setText(TestActivity.queryText);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         //mRecyclerView.setHasFixedSize(true);
@@ -68,6 +74,7 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
         Log.d(TAG, String.valueOf(products.length));
         mAdapter = new ProductAdapter(products, this);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
         return view;
 
     }

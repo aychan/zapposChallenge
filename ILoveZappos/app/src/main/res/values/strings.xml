@@ -9,4 +9,7 @@
     <string name="off">off</string>
     <string name="generic_cost">$00.00</string>
     <string name="total_cost">Total Cost:</string>
+    <string name="search_results_for">Search Results For:</string>
+    <string name="check_out">Check Out</string>
+    <string name="delete">Delete</string>
 </resources>

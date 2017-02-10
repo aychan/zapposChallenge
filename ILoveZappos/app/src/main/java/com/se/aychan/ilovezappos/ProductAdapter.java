@@ -102,7 +102,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public int getItemCount() {
         return mDataSet.length;
     }
-
+    /*
+        override helps with ensuring items in recyclerview do not get mixed up
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     /*
      AsyncTask which loads URL from online onto ImageView
     */
