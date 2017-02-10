@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.se.aychan.ilovezappos.databinding.ActivityProductDetailsBinding;
 
@@ -24,6 +26,9 @@ public class ProductDetails extends AppCompatActivity {
     // Views
     private ImageView imageView;
     private FloatingActionButton fab;
+    private Spinner spinner;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: 2/9/17 pretty sure these product details are correct, but the ones in recyclerview are now for some reason
@@ -34,6 +39,12 @@ public class ProductDetails extends AppCompatActivity {
         binding.setProduct(product);
 
         imageView = (ImageView) findViewById(R.id.product_img);
+
+        spinner = (Spinner)findViewById(R.id.spinner);
+        String[] array = new String[]{"1", "2", "3", "4", "5","6","7","8","9","10","10+"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, array);
+        spinner.setAdapter(adapter);
 
         fab = (FloatingActionButton) findViewById(R.id.productFAB);
         fab.setOnClickListener(new View.OnClickListener() {

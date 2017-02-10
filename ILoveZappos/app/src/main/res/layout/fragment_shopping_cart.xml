@@ -31,7 +31,7 @@
         <LinearLayout
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:gravity="end"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -39,11 +39,13 @@
             <TextView
                 android:gravity="start"
                 android:layout_width="wrap_content"
+                android:maxWidth="100dp"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
                 android:text="Press and hold item to remove"/>
 
             <TextView
+                android:gravity="end"
                 android:paddingStart="4dp"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_cost" />
             <TextView
+                android:gravity="end"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:paddingStart="4dp"
