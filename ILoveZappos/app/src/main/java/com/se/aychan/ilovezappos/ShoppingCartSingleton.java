@@ -45,10 +45,15 @@ public class ShoppingCartSingleton {
         return products.size();
     }
 
-    int getTotalCost(){
-        int total = 0;
+    double getTotalCost(){
+        double total = 00.00;
         for(Product p : products){
-            String priceStr = p.getPrice().substring(1);
+            String priceStr = null;
+            if (p.hasDiscount()){
+                priceStr = p.getPrice().substring(1);
+            }else{
+                priceStr = p.getOriginalPrice().substring(1);
+            }
             Double price = Double.parseDouble(priceStr);
             total+=price;
         }

@@ -3,9 +3,14 @@ package com.se.aychan.ilovezappos;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+
 
 
 /**
@@ -16,8 +21,16 @@ import android.view.ViewGroup;
  * Use the {@link ShoppingCartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingCartFragment extends Fragment {
+public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapter.onCartItemClickedListener{
 
+    private final String TAG = getClass().getSimpleName();
+    //RecyclerView Variables
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    //Views
+    private TextView totalCost;
 
     private OnFragmentInteractionListener mListener;
 
@@ -30,7 +43,6 @@ public class ShoppingCartFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment ShoppingCartFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ShoppingCartFragment newInstance() {
         ShoppingCartFragment fragment = new ShoppingCartFragment();
         return fragment;
@@ -45,7 +57,15 @@ public class ShoppingCartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        View view =  inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.cart_recycler_view);
+        mLayoutManager = new LinearLayoutManager(view.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        Product[] products = ShoppingCartSingleton.getInstance().getAllFromCart();
+        mAdapter = new ShoppingCartAdapter(products, this);
+        mRecyclerView.setAdapter(mAdapter);
+        totalCost = (TextView)view.findViewById(R.id.totalCost);
+        return view;
     }
 
     @Override
@@ -64,6 +84,35 @@ public class ShoppingCartFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!getUserVisibleHint()) {
+            return;
+        }
+        double totalVal = Math.round(ShoppingCartSingleton.getInstance().getTotalCost()*100.00)/100.00;
+        String result = "$" + totalVal;
+        totalCost.setText(result);
+    }
+
+    @Override
+    public void onCartItemInteraction(Product product) {
+        setUserVisibleHint(true);
+        mListener.onCartFragmentInteraction(product);
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -76,7 +125,6 @@ public class ShoppingCartFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onCartFragmentInteraction(Product product);
     }
 }

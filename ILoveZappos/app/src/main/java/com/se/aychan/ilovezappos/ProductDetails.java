@@ -38,6 +38,8 @@ public class ProductDetails extends AppCompatActivity {
                 Snackbar snackbar = Snackbar.make(v, "Added to Shopping Cart!",Snackbar.LENGTH_SHORT);
                 snackbar.show();
                 Log.d(TAG, "count: "+ ShoppingCartSingleton.getInstance().getCartCount());
+                // TODO: 2/9/17 notify ShoppingCartFragment that there was addition
+
             }
         });
         new DownloadImageTask(imageView).execute(product.getThumbnailImageUrl());

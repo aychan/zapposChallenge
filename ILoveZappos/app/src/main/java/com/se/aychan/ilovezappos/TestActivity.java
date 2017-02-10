@@ -216,7 +216,8 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
 
     @Override
     public void onCartFragmentInteraction(Product product) {
-        // TODO: 2/9/17 do your thang
+        Log.d(TAG,"Updating Shopping Cart");
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     /*
@@ -241,7 +242,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
 
         @Override
         public Fragment getItem(int position) {
-            Log.d(TAG," ANYONE HOME?");
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             Fragment fragment = new Fragment();
@@ -283,5 +283,11 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
             return null;
         }
 
+    }
+
+    @Override
+    protected void onPostResume() {
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        super.onPostResume();
     }
 }
