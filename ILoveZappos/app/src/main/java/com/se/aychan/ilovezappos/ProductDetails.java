@@ -51,10 +51,8 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ShoppingCartSingleton.getInstance().addToCart(product);
-                Snackbar snackbar = Snackbar.make(v, "Added to Shopping Cart!",Snackbar.LENGTH_SHORT);
-                snackbar.show();
-                Log.d(TAG, "count: "+ ShoppingCartSingleton.getInstance().getCartCount());
-                // TODO: 2/9/17 notify ShoppingCartFragment that there was addition
+                fab.hide();
+                new AnimatePurchase(fab,v).execute();
 
             }
         });
@@ -101,6 +99,36 @@ public class ProductDetails extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+        }
+    }
+    /*
+     AsyncTask which animates fab along with snackbar
+  */
+    private class AnimatePurchase extends AsyncTask<String, Void, String> {
+        FloatingActionButton fab;
+        View v;
+        AnimatePurchase(FloatingActionButton fab, View v) {
+            this.fab = fab;
+            this.v = v;
+        }
+
+        protected String doInBackground(String... urls) {
+
+
+            try {
+                Snackbar snackbar = Snackbar.make(v, "Added to Shopping Cart!",Snackbar.LENGTH_SHORT);
+                snackbar.show();
+                Thread.sleep(2000L);
+            } catch (Exception e) {
+                Log.d("Error", e.getMessage());
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            fab.show();
         }
     }
 
