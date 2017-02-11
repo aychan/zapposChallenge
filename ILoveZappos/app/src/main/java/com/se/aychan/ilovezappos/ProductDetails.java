@@ -19,7 +19,12 @@ import android.widget.Spinner;
 import com.se.aychan.ilovezappos.databinding.ActivityProductDetailsBinding;
 
 import java.io.InputStream;
-
+/*
+    @author Anthony Chan
+    This Activity is for displaying a single product with its reviews, details, purchase information
+    Currently the Spinner and the EditText are not hooked up, due to them only being there for
+    representational purposes. Later if enough time, they will be made
+ */
 public class ProductDetails extends AppCompatActivity {
     private ActivityProductDetailsBinding binding;
     private String TAG = getClass().getSimpleName();
@@ -28,10 +33,8 @@ public class ProductDetails extends AppCompatActivity {
     private FloatingActionButton fab;
     private Spinner spinner;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO: 2/9/17 pretty sure these product details are correct, but the ones in recyclerview are now for some reason
         super.onCreate(savedInstanceState);
 
         final Product product = getIntent().getParcelableExtra("product");
@@ -57,14 +60,12 @@ public class ProductDetails extends AppCompatActivity {
             }
         });
         new DownloadImageTask(imageView).execute(product.getThumbnailImageUrl());
-        //setContentView(R.layout.activity_product_details);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Product Details");
         toolbar.setTitleTextColor(Color.WHITE);
-        //toolbar.setSubtitleTextColor(Color.WHITE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

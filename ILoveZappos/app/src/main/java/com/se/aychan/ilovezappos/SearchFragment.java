@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 
 /**
+ * Holds Recycler View of Products queried by user
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link SearchFragment.OnFragmentInteractionListener} interface
@@ -63,10 +64,7 @@ public class SearchFragment extends Fragment implements ProductAdapter.onProduct
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         searchText = (TextView) view.findViewById(R.id.searchTextV);
-        searchText.setText(TestActivity.queryText);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        //mRecyclerView.setHasFixedSize(true);
+        searchText.setText(MainActivity.queryText);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

@@ -19,6 +19,7 @@ import java.io.InputStream;
 
 /**
  * Created by aychan on 2/9/17.
+ * Adapter's primary usage is for the RecyclerView and Binding data to Views
  */
 
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder> {

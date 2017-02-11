@@ -21,6 +21,9 @@ import java.io.Serializable;
 
 
 /**
+ *
+ * TEST CLASS
+ *
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link ProductFragment.OnProductFragmentInteractionListener} interface
@@ -64,10 +67,10 @@ public class ProductFragment extends Fragment implements Serializable{
         if (getArguments() != null) {
 
             Product mParam1 = getArguments().getParcelable(ARG_PARAM1);
-            Log.d(TAG, "Product: " + mParam1.getProductName());
+            //Log.d(TAG, "Product: " + mParam1.getProductName());
             this.product = mParam1;
         }else{
-            Log.d(TAG, "Arguments are null");
+            //Log.d(TAG, "Arguments are null");
         }
 
     }
@@ -79,7 +82,6 @@ public class ProductFragment extends Fragment implements Serializable{
         // View root = inflater.inflate(R.layout.fragment_product, container, false);
         // No longer using given inflater, will be using data binding with this fragment
         FragmentProductBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_product,container,false);
-        // TODO: 2/7/17 design fragment UI
         View root = binding.getRoot();
         initializeViews(root);
         binding.setProduct(product);

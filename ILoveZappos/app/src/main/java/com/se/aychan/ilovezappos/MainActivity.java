@@ -18,9 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,15 +27,15 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /*
-    TestActivity to test the GET & POST of the Square Retrofit ReST Software
+    MainActivity (Originally TestActivity)
+    USAGE: GET & POST of the Square Retrofit ReST Software to access Zappos Servers
+    Holds Viewpager to house the SearchFragment and ShoppingCartFragment
  */
-public class TestActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener, ShoppingCartFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener, ShoppingCartFragment.OnFragmentInteractionListener{
     protected final String TAG = this.getClass().getSimpleName();
-    protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
+//    protected String KEY = "b743e26728e16b81da139182bb2094357c31d331";
 
     //Views
-//    private TextView resultTV;
-//    private ImageView productImg;
     private ProgressBar progressBar;
     private android.support.v7.widget.SearchView searchView;
     private FrameLayout productFragmentLayout;
@@ -65,28 +62,9 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        assert toolbar != null;
-//        toolbar.addView(new EditText(getApplicationContext()));
-//        setSupportActionBar(toolbar);
+
         initializeViews();
         createRetrofit();
-
-//        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-//
-//        // use this setting to improve performance if you know that changes
-//        // in content do not change the layout size of the RecyclerView
-//        mRecyclerView.setHasFixedSize(true);
-//
-//
-//        // use a linear layout manager
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        // TODO: 2/7/17 do i make the adapter here? or wait until user input
-        //mAdapter = new ProductAdapter(myDataset);
-        //mRecyclerView.setAdapter(mAdapter);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -94,10 +72,12 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        assert mViewPager != null;
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        assert tabLayout != null;
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
 
@@ -108,12 +88,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
     link View variables to Layout Views
      */
     void initializeViews(){
-        //productFragmentLayout = (FrameLayout)findViewById(R.id.productFragmentLayout);
         searchView = (android.support.v7.widget.SearchView)findViewById(R.id.SearchView);
-
-//        resultTV = (TextView)findViewById(R.id.resultTV);
-//        productImg = (ImageView)findViewById(R.id.productIV);
-
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         assert progressBar != null;
         progressBar.setVisibility(View.INVISIBLE);
@@ -121,9 +96,9 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                TestActivity.queryText = query;
+                MainActivity.queryText = query;
                 progressBar.setVisibility(View.VISIBLE);
-                final Call<SearchQuery> result = service.listSearch(query,KEY);
+                final Call<SearchQuery> result = service.listSearch(query,getResources().getString(R.string.KEY));
                 result.enqueue(new Callback<SearchQuery>() {
                     @Override
                     public void onResponse(Call<SearchQuery> call, Response<SearchQuery> response) {
@@ -132,14 +107,8 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                             searchView.clearFocus();
                             Product[] array = response.body().getResults();
 
-                            //FragmentManager fragmentManager = getSupportFragmentManager();
-                            //FragmentTransaction fragmentTransation = fragmentManager.beginTransaction();
-                            /*
-                                When first search, productFragent will be null and will then be created
-                                Once the user updates the search, fragment will be replaced!
-                             */
                             if(array.length == 0){
-                                Toast.makeText(TestActivity.this, "No Products Match Your Search :(", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "No Products Match Your Search :(", Toast.LENGTH_SHORT).show();
                             }else {
                                 /*
                                     Clear the Singleton, add new data for Fragment use
@@ -147,20 +116,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                                 SearchSingleton.getInstance().clearQuery();
                                 SearchSingleton.getInstance().addAll(array);
                                 mSectionsPagerAdapter.notifyDataSetChanged();
-
-
-//                                if (productFragment != null) {
-//                                    fragmentTransation.remove(productFragment);
-//                                    productFragment = ProductFragment.newInstance(array[0]);
-//                                    fragmentTransation.replace(R.id.productFragmentLayout, productFragment);
-//                                } else {
-//                                    productFragment = ProductFragment.newInstance(array[0]);
-//                                    fragmentTransation.add(productFragmentLayout.getId(), productFragment, "productFragment");
-//                                }
-//                                fragmentTransation.commit();
-                                // TODO: 2/7/17 there are multiple items which are same but just have different color, find way to group them together
-//                                mAdapter = new ProductAdapter(array);
-//                                mRecyclerView.setAdapter(mAdapter);
                             }
                             progressBar.setVisibility(View.INVISIBLE);
                         }else{
@@ -185,22 +140,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
 
     }
     /*
-    Given one product, display onto screen
-     */
-    void displayProduct(Product product) {
-        Log.d(TAG, product.getBrandName() + " " + product.getProductName() + " " + product.getProductUrl() + " " + product.getThumbnailImageUrl());
-        String productName = null;
-        try {
-            productName = URLDecoder.decode(product.getBrandName() + " " + product.getProductName(),"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-//        resultTV.setText(Html.fromHtml(productName));
-//        //Set thumbnail image onto display
-//        new DownloadImageTask(productImg).execute(product.getThumbnailImageUrl());
-
-    }
-    /*
     Build retrofit2 Object
      */
     void createRetrofit(){
@@ -217,7 +156,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
     public void onSearchFragmentInteraction(Product product) {
         Intent intent = new Intent(this, ProductDetails.class);
         intent.putExtra("product",product);
-        // TODO: 2/9/17 transition animation
+        // Transition Animation
         searchView.setQuery("", false);
         searchView.setIconified(true);
         startActivity(intent);
@@ -257,7 +196,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
             switch (position){
                 case 0:
                     fragment = SearchFragment.newInstance();
-//                     notifyDataSetChanged();
                     break;
 
                 case 1:
@@ -270,7 +208,6 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
 
         @Override
         public int getItemPosition(Object object) {
-            //return super.getItemPosition(object);
             return POSITION_NONE;
         }
 
@@ -286,7 +223,7 @@ public class TestActivity extends AppCompatActivity implements SearchFragment.On
                 case 0:
                     return "Search";
                 case 1:
-                    return "Cart";
+                    return "Shopping Cart";
                 
             }
             return null;

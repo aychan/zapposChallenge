@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TestActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".ProductDetails"></activity>
     </application>

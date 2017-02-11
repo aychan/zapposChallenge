@@ -59,7 +59,7 @@ public class LaunchActivity extends AppCompatActivity {
         {
             super.onPostExecute(result);
             //Determine which activity to go to based on shared preferences. for now just one option.
-            Intent intent = new Intent(LaunchActivity.this, TestActivity.class);
+            Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
             startActivity(intent);
             finish(); //remove this activity from activity stack, destroy
         }

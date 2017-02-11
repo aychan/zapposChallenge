@@ -61,7 +61,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_product, parent, false);
+        
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         binding = DataBindingUtil.inflate(layoutInflater,R.layout.fragment_product,parent,false);
@@ -73,13 +73,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, final int position) {
-        // TODO: 2/8/17 holder.bind(mDataSet[position]); <-- the real databinding method, except for the image
         binding.setProduct(mDataSet[holder.getAdapterPosition()]);
-//        holder.productName.setText(mDataSet[position].getProductName());
-//        holder.brandName.setText(mDataSet[position].getBrandName());
-//        holder.price.setText(mDataSet[position].getPrice());
-//        holder.originalPrice.setText(mDataSet[position].getOriginalPrice());
-//        holder.percentOff.setText(mDataSet[position].getPercentOff());
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

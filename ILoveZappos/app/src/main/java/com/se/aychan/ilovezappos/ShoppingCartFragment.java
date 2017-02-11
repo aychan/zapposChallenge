@@ -103,8 +103,9 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         if (!getUserVisibleHint()) {
             return;
         }
-        double totalVal = Math.round(ShoppingCartSingleton.getInstance().getTotalCost()*100.00)/100.00;
+        double totalVal = ShoppingCartSingleton.getInstance().getTotalCost();
         String result = "$" + totalVal;
+        if (result.charAt(result.length()-1) == '0'){result = result + '0';}
         totalCost.setText(result);
     }
 

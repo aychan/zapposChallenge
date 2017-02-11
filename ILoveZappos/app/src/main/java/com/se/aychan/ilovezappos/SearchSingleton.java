@@ -5,6 +5,7 @@ import java.util.Collections;
 
 /**
  * Created by aychan on 2/9/17.
+ * Holds value of all Products obtained by query
  */
 public class SearchSingleton {
 
