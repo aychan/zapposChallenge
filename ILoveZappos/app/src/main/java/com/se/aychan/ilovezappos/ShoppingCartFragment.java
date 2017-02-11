@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-
-
+import android.widget.Toast;
 
 
 /**
@@ -31,6 +31,7 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
 
     //Views
     private TextView totalCost;
+    private Button checkOutBtn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +59,8 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cart_recycler_view);
         mLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -65,6 +68,14 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         mAdapter = new ShoppingCartAdapter(products, this);
         mRecyclerView.setAdapter(mAdapter);
         totalCost = (TextView)view.findViewById(R.id.totalCost);
+
+        checkOutBtn = (Button) view.findViewById(R.id.checkOutBtn);
+        checkOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Checked Out (Theoretically) :D", Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -105,7 +116,7 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         }
         double totalVal = ShoppingCartSingleton.getInstance().getTotalCost();
         String result = "$" + totalVal;
-        if (result.charAt(result.length()-1) == '0'){result = result + '0';}
+        if (result.charAt(result.length()-2) == '.'){result = result + '0';}
         totalCost.setText(result);
     }
 
