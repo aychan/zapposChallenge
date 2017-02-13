@@ -12,6 +12,14 @@ NOTE ABOUT APK:
 Signed APK can be found in the apk folder. There are two:
 build.apk is just app-release.apk renamed, however I left in both just in case errors occur because of the renaming for any reasons.
 
+# Conclusion & Thoughts:
+Overall, this was an extremely fun challenge to test myself and see how well I can perform with the knowledge I currently have, and new tools which I have learned from doing this. This project has helped me better understand my strengths (Workflow, Implementation, General Comprehension), and my weaknesses/not-so-good-at-yets (Design, Detail-Oriented Comprehension). After some review (and of course I can add to this after the challenge), there are several things I wish I had implemented.
+1.) (Most Important Wish) With the product page, I wish I had implemented a 'color option' for the product, as with each query, there was bound to be products with the same productID but with different thumbnail images and colorIDs. It would have been nice to implement an image viewpager or some spinner to show the different options of color available for each product seen.
+2.) Design is something that will be learned with more experience and input from coworkers and friends. Animations and the implementation of transitions were lacking, but on the bright side the usability with animations dedicated to user input were fair...enough...for now.
+
+So 10/10 Experience, would do it again.
+
+
 # Requirements:
 - [x] Databinding for the product page ( https://developer.android.com/topic/libraries/data-binding/index.html )
 - [x] Animation when floating action button clicked ( https://developer.android.com/training/animation/index.html )
